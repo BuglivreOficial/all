@@ -1,0 +1,38 @@
+<p style="margin: 28px 0 0;"><a class="see-all" href="{{ url('/mangas') }}">← Voltar ao catálogo</a></p>
+
+<div class="detail">
+    <div class="detail-cover">
+        <div class="cover">
+            {% if manga.cover %}
+                <img src="{{ manga.cover }}" alt="Capa de {{ manga.title }}">
+            {% else %}
+                <div class="cover-ph">{{ manga.title|slice(0, 1) }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div>
+        <h1>{{ manga.title }}</h1>
+        <p class="byline">
+            {{ manga.type_name }}
+            {% if manga.author_name %} · {{ manga.author_name }}{% endif %}
+        </p>
+
+        <div class="detail-tags">
+            <span class="badge badge-{{ manga.status }}">{{ manga_statuses[manga.status]|default(manga.status) }}</span>
+            {% for category in manga.categories %}
+                <a class="chip" href="{{ url('/mangas') }}?category={{ category.id }}">{{ category.name }}</a>
+            {% endfor %}
+        </div>
+
+        <dl>
+            <dt>Tipo</dt><dd>{{ manga.type_name ?: '—' }}</dd>
+            <dt>Autor</dt><dd>{{ manga.author_name ?: '—' }}</dd>
+            <dt>Status</dt><dd>{{ manga_statuses[manga.status]|default(manga.status) }}</dd>
+            <dt>Atualizado em</dt><dd>{{ manga.updated_at ?: (manga.created_at ?: '—') }}</dd>
+        </dl>
+
+        <h2 style="font-size: 18px;">Sinopse</h2>
+        <p class="synopsis">{{ manga.description ?: 'Sinopse ainda não disponível.' }}</p>
+    </div>
+</div>

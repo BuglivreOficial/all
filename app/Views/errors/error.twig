@@ -1,0 +1,5 @@
+<section class="card" style="max-width: 520px; margin: 56px auto; text-align: center;">
+    <h1 style="font-size: 44px; margin: 0 0 8px;">{{ status|default(500) }}</h1>
+    <p class="muted">{{ message|default('Ocorreu um erro.') }}</p>
+    <a class="btn btn-primary" href="{{ url('/') }}">Voltar ao início</a>
+</section>

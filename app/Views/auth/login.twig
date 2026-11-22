@@ -1,0 +1,23 @@
+<div class="auth-wrap">
+    <div class="card">
+        <h1>Entrar</h1>
+
+        {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" action="{{ url('/login') }}">
+            <label>
+                E-mail ou nome de usuário
+                <input type="text" name="login" value="{{ identifier|default('') }}" required autofocus>
+            </label>
+            <label>
+                Senha
+                <input type="password" name="password" required>
+            </label>
+            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+        </form>
+
+        <p class="auth-switch">Não tem conta? <a href="{{ url('/register') }}">Criar conta</a></p>
+    </div>
+</div>

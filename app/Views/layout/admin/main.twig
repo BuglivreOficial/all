@@ -1,0 +1,59 @@
+{% set auth = auth|default({check: false, name: '', role: 'user', can_manage: false}) %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title|default('Administração') }} · Admin · {{ app_name }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+</head>
+<body>
+<div class="shell">
+    <aside class="sidebar">
+        <a href="{{ url('/admin') }}" class="brand"><span class="mark">B</span> {{ app_name }}</a>
+
+        <div class="nav-group">
+            <div class="nav-label">Gestão</div>
+            <a class="nav-item {{ current_path == '/admin' ? 'active' : '' }}" href="{{ url('/admin') }}">
+                <span class="ico">▤</span> Dashboard
+            </a>
+            <a class="nav-item {{ current_path starts with '/admin/categories' ? 'active' : '' }}" href="{{ url('/admin/categories') }}">
+                <span class="ico">❏</span> Categorias
+            </a>
+            <a class="nav-item {{ current_path starts with '/admin/types' ? 'active' : '' }}" href="{{ url('/admin/types') }}">
+                <span class="ico">◈</span> Tipos
+            </a>
+            <a class="nav-item {{ current_path starts with '/admin/authors' ? 'active' : '' }}" href="{{ url('/admin/authors') }}">
+                <span class="ico">✎</span> Autores
+            </a>
+            <a class="nav-item {{ current_path starts with '/admin/mangas' ? 'active' : '' }}" href="{{ url('/admin/mangas') }}">
+                <span class="ico">★</span> Mangás
+            </a>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-label">Site</div>
+            <a class="nav-item" href="{{ url('/dashboard') }}"><span class="ico">◉</span> Minha conta</a>
+            <a class="nav-item" href="{{ url('/') }}"><span class="ico">↗</span> Ver site</a>
+        </div>
+
+        <div class="who">
+            {% if auth.name %}
+                <strong>{{ auth.name }}</strong>
+                <span class="role">{{ role_labels[auth.role]|default(auth.role) }}</span>
+            {% endif %}
+            <form method="post" action="{{ url('/logout') }}">
+                <button type="submit" class="btn-link">Sair</button>
+            </form>
+        </div>
+    </aside>
+
+    <div class="main">
+        {{ content|raw }}
+    </div>
+</div>
+</body>
+</html>

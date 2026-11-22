@@ -1,0 +1,44 @@
+<div class="auth-wrap">
+    <div class="card">
+        <h1>Criar conta</h1>
+
+        {% if errors is not empty %}
+            <div class="alert alert-error">Corrija os campos destacados abaixo.</div>
+        {% endif %}
+
+        <form method="post" action="{{ url('/register') }}">
+            <label>
+                Nome
+                <input type="text" name="name" value="{{ old.name|default('') }}" required autofocus>
+            </label>
+            {% if errors.name is defined %}<div class="field-error">{{ errors.name[0] }}</div>{% endif %}
+
+            <label>
+                Nome de usuário
+                <input type="text" name="username" value="{{ old.username|default('') }}" required>
+            </label>
+            {% if errors.username is defined %}<div class="field-error">{{ errors.username[0] }}</div>{% endif %}
+
+            <label>
+                E-mail
+                <input type="email" name="email" value="{{ old.email|default('') }}" required>
+            </label>
+            {% if errors.email is defined %}<div class="field-error">{{ errors.email[0] }}</div>{% endif %}
+
+            <label>
+                Senha
+                <input type="password" name="password" required>
+            </label>
+            {% if errors.password is defined %}<div class="field-error">{{ errors.password[0] }}</div>{% endif %}
+
+            <label>
+                Confirmar senha
+                <input type="password" name="password_confirmation" required>
+            </label>
+
+            <button type="submit" class="btn btn-primary btn-block">Criar conta</button>
+        </form>
+
+        <p class="auth-switch">Já tem conta? <a href="{{ url('/login') }}">Entrar</a></p>
+    </div>
+</div>

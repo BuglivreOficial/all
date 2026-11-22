@@ -1,0 +1,20 @@
+{% set meta = manga_statuses[manga.status]|default(manga.status) %}
+<article class="manga-card">
+    <a class="cover" href="{{ url('/mangas/' ~ manga.slug) }}">
+        {% if manga.cover %}
+            <img src="{{ manga.cover }}" alt="Capa de {{ manga.title }}" loading="lazy">
+        {% else %}
+            <div class="cover-ph">{{ manga.title|slice(0, 1) }}</div>
+        {% endif %}
+        {% if manga.type_name %}
+            <span class="type-tag">{{ manga.type_name }}</span>
+        {% endif %}
+    </a>
+    <div class="card-body">
+        <a class="card-title" href="{{ url('/mangas/' ~ manga.slug) }}">{{ manga.title }}</a>
+        <div class="card-meta">
+            <span class="badge badge-{{ manga.status }}">{{ meta }}</span>
+            {% if manga.author_name %}<span>{{ manga.author_name }}</span>{% endif %}
+        </div>
+    </div>
+</article>

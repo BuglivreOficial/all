@@ -1,0 +1,118 @@
+<div class="page-head">
+    <h1>Mangás</h1>
+    <a class="btn btn-primary" href="{{ url('/admin/mangas/create') }}">+ Novo mangá</a>
+</div>
+
+{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+{% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
+
+<section class="card">
+    <form method="get" action="{{ url('/admin/mangas') }}" class="form-grid">
+        <div>
+            <label>
+                Buscar (título ou autor)
+                <input type="text" name="q" value="{{ search }}" placeholder="Digite para filtrar...">
+            </label>
+        </div>
+        <div>
+            <label>
+                Categoria
+                <select name="category">
+                    <option value="">Todas</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {{ categoryId == category.id ? 'selected' : '' }}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <div>
+            <label>
+                Tipo
+                <select name="type">
+                    <option value="">Todos</option>
+                    {% for type in types %}
+                        <option value="{{ type.id }}" {{ typeId == type.id ? 'selected' : '' }}>
+                            {{ type.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <div>
+            <button type="submit">Filtrar</button>
+        </div>
+    </form>
+</section>
+
+<section class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Capa</th>
+                <th>Título</th>
+                <th>Tipo</th>
+                <th>Categoria</th>
+                <th>Autor</th>
+                <th>Status</th>
+                <th>Situação</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for manga in mangas %}
+                <tr>
+                    <td>{{ manga.id }}</td>
+                    <td>
+                        {% if manga.cover %}
+                            <img src="{{ manga.cover }}" alt="" class="thumb" loading="lazy">
+                        {% else %}
+                            <span class="muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ manga.title }}
+                        <div class="muted" style="font-size: 12px;">{{ manga.slug }}</div>
+                    </td>
+                    <td>
+                        {% if manga.type_name %}
+                            <span class="badge">{{ manga.type_name }}</span>
+                        {% else %}
+                            <span class="muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ manga.categoryLabel() ?: '—' }}
+                    </td>
+                    <td class="muted">{{ manga.author_name ?: '—' }}</td>
+                    <td><span class="badge badge-{{ manga.status }}">{{ manga_statuses[manga.status]|default(manga.status) }}</span></td>
+                    <td>
+                        <span class="badge {{ manga.is_active ? '' : 'badge-off' }}">
+                            {{ manga.is_active ? 'Ativo' : 'Inativo' }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <a class="btn-link" href="{{ url('/admin/mangas/' ~ manga.id ~ '/edit') }}">Editar</a>
+
+                            <form method="post" action="{{ url('/admin/mangas/' ~ manga.id ~ '/status') }}">
+                                <button type="submit" class="btn-muted btn-sm">
+                                    {{ manga.is_active ? 'Desativar' : 'Ativar' }}
+                                </button>
+                            </form>
+
+                            <form method="post" action="{{ url('/admin/mangas/' ~ manga.id ~ '/delete') }}"
+                                  onsubmit="return confirm('Excluir o mangá &quot;{{ manga.title }}&quot;? Esta ação não pode ser desfeita.');">
+                                <button type="submit" class="btn-danger btn-sm">Excluir</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="9" class="muted">Nenhum mangá encontrado.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>

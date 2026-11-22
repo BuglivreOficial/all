@@ -1,0 +1,23 @@
+{
+    "name": "buglivreoficial/all",
+    "type": "project",
+    "require": {
+        "symfony/var-dumper": "^8.1",
+        "twig/twig": "^3.30"
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\": "core/",
+            "App\\": "app/"
+        },
+        "files": [
+            "core/helpers.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "BugLivreOficial",
+            "email": "buglivreoficial@gmail.com"
+        }
+    ]
+}

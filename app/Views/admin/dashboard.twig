@@ -1,0 +1,41 @@
+<section class="card">
+    <div class="page-head">
+        <h1>Dashboard</h1>
+        <a class="btn btn-ghost" href="{{ url('/admin/mangas/create') }}">+ Novo mangá</a>
+    </div>
+    <p class="muted">
+        Bem-vindo{% if user %}, {{ user.name }}{% endif %}.
+        Você acessa esta área com o perfil
+        <span class="badge">{{ user ? role_labels[user.role]|default(user.role) : '' }}</span>.
+    </p>
+</section>
+
+<section class="card">
+    <h2>Usuários recentes</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Usuário</th>
+                <th>E-mail</th>
+                <th>Perfil</th>
+                <th>Desde</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in users %}
+                <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.name }}</td>
+                    <td class="muted">{{ row.username }}</td>
+                    <td class="muted">{{ row.email }}</td>
+                    <td><span class="badge">{{ role_labels[row.role]|default(row.role) }}</span></td>
+                    <td class="muted">{{ row.created_at }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6" class="muted">Nenhum usuário cadastrado.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>

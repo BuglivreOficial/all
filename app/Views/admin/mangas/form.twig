@@ -1,0 +1,155 @@
+{% set isEdit = manga is not null %}
+{% set action = isEdit ? url('/admin/mangas/' ~ manga.id) : url('/admin/mangas') %}
+
+{% if old.type_id is defined and old.type_id is not null %}
+    {% set selectedType = old.type_id %}
+{% elseif isEdit %}
+    {% set selectedType = manga.type_id %}
+{% else %}
+    {% set selectedType = 0 %}
+{% endif %}
+
+{% if old.author_id is defined and old.author_id is not null %}
+    {% set selectedAuthor = old.author_id == '' ? 0 : old.author_id %}
+{% elseif isEdit %}
+    {% set selectedAuthor = manga.author_id ?: 0 %}
+{% else %}
+    {% set selectedAuthor = 0 %}
+{% endif %}
+
+{% if old.category_ids is defined and old.category_ids is not null %}
+    {% set selectedCategories = old.category_ids %}
+{% elseif isEdit %}
+    {% set selectedCategories = manga.categories|map(c => c.id) %}
+{% else %}
+    {% set selectedCategories = [] %}
+{% endif %}
+
+{% set selectedStatus = old.status|default(isEdit ? manga.status : 'ongoing') %}
+
+<div class="page-head">
+    <h1>{{ isEdit ? 'Editar mangá' : 'Novo mangá' }}</h1>
+    <a class="btn-link" href="{{ url('/admin/mangas') }}">&larr; Voltar</a>
+</div>
+
+{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+
+<section class="card">
+    <form method="post" action="{{ action }}" enctype="multipart/form-data">
+        <div class="form-grid">
+            <div>
+                <label>
+                    Título
+                    <input type="text" name="title" maxlength="200" value="{{ old.title|default(isEdit ? manga.title : '') }}" required autofocus>
+                </label>
+                {% if errors.title is defined and errors.title|length %}
+                    <div class="field-error">{{ errors.title[0] }}</div>
+                {% endif %}
+
+                <label>
+                    Tipo
+                    <select name="type_id" required>
+                        <option value="">Selecione um tipo...</option>
+                        {% for type in types %}
+                            <option value="{{ type.id }}" {{ selectedType == type.id ? 'selected' : '' }}>
+                                {{ type.name }}{{ type.is_active ? '' : ' (inativo)' }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </label>
+                {% if errors.type_id is defined and errors.type_id|length %}
+                    <div class="field-error">{{ errors.type_id[0] }}</div>
+                {% endif %}
+
+                <label>
+                    Autor (opcional)
+                    <select name="author_id">
+                        <option value="">Sem autor</option>
+                        {% for author in authors %}
+                            <option value="{{ author.id }}" {{ selectedAuthor == author.id ? 'selected' : '' }}>
+                                {{ author.name }}{{ author.is_active ? '' : ' (inativo)' }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </label>
+                {% if errors.author_id is defined and errors.author_id|length %}
+                    <div class="field-error">{{ errors.author_id[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div>
+                <label>
+                    Categorias
+                    <select name="category_ids[]" multiple size="6" required>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}" {{ category.id in selectedCategories ? 'selected' : '' }}>
+                                {{ category.name }}{{ category.is_active ? '' : ' (inativa)' }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <small class="muted">Use Ctrl (ou Cmd) para selecionar várias categorias.</small>
+                </label>
+                {% if errors.category_ids is defined and errors.category_ids|length %}
+                    <div class="field-error">{{ errors.category_ids[0] }}</div>
+                {% endif %}
+
+                <label>
+                    Status
+                    <select name="status" required>
+                        {% for key, label in manga_statuses %}
+                            <option value="{{ key }}" {{ selectedStatus == key ? 'selected' : '' }}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </label>
+                {% if errors.status is defined and errors.status|length %}
+                    <div class="field-error">{{ errors.status[0] }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-grid">
+            <div>
+                <label>
+                    Capa &mdash; upload para o servidor
+                    <input type="file" name="cover_file" accept="image/png,image/jpeg,image/webp,image/gif">
+                </label>
+                {% if errors.cover_file is defined and errors.cover_file|length %}
+                    <div class="field-error">{{ errors.cover_file[0] }}</div>
+                {% endif %}
+                <small class="muted">Envie JPG, PNG, WEBP ou GIF (até 5 MB). O upload substitui o caminho abaixo.</small>
+            </div>
+            <div>
+                <label>
+                    Caminho/URL da capa (opcional)
+                    <input type="text" name="cover" maxlength="255" value="{{ old.cover|default(isEdit ? manga.cover : '') }}" placeholder="/uploads/covers/... ou https://...">
+                </label>
+                {% if errors.cover is defined and errors.cover|length %}
+                    <div class="field-error">{{ errors.cover[0] }}</div>
+                {% endif %}
+
+                {% if isEdit and manga.cover %}
+                    <p class="muted" style="font-size: 13px;">Capa atual:</p>
+                    <img src="{{ manga.cover }}" alt="" class="thumb" style="width: 88px; height: 124px;">
+                {% endif %}
+            </div>
+        </div>
+
+        <label>
+            Sinopse (opcional)
+            <textarea name="description" maxlength="5000">{{ old.description|default(isEdit ? manga.description : '') }}</textarea>
+        </label>
+        {% if errors.description is defined and errors.description|length %}
+            <div class="field-error">{{ errors.description[0] }}</div>
+        {% endif %}
+
+        {% if isEdit %}
+            <p class="muted" style="font-size: 13px;">
+                Slug (gerado automaticamente): <code>{{ manga.slug }}</code>
+            </p>
+        {% endif %}
+
+        <button type="submit">{{ isEdit ? 'Salvar alterações' : 'Criar mangá' }}</button>
+    </form>
+</section>
