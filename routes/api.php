@@ -5,6 +5,7 @@ use App\Controllers\Api\AuthController;
 use App\Controllers\Api\CategoryController;
 use App\Controllers\Api\MangaController;
 use App\Controllers\Api\MangaTypeController;
+use App\Controllers\Api\UserController;
 
 /**
  * Rotas da API (respostas em JSON). Todas ficam sob o prefixo /api.
@@ -12,11 +13,13 @@ use App\Controllers\Api\MangaTypeController;
  * @var \Core\Routing\Router $router
  */
 
-// Autenticação (público).
-$router->post('/auth/register', [AuthController::class, 'register']);
-$router->post('/auth/login', [AuthController::class, 'login']);
+// Autenticação (público). Limite rígido para conter abuso/força bruta.
+$router->post('/auth/register', [AuthController::class, 'register'], ['throttle:10,1']);
+$router->post('/auth/login', [AuthController::class, 'login'], ['throttle:10,1']);
 $router->post('/auth/logout', [AuthController::class, 'logout']);
-$router->post('/auth/refresh', [AuthController::class, 'refresh']);
+$router->post('/auth/refresh', [AuthController::class, 'refresh'], ['throttle:10,1']);
+$router->post('/auth/forgot-password', [AuthController::class, 'forgotPassword'], ['throttle:10,1']);
+$router->post('/auth/reset-password', [AuthController::class, 'resetPassword'], ['throttle:10,1']);
 $router->get('/auth/me', [AuthController::class, 'me']);
 
 // Catálogo: leitura pública, escrita restrita a moderador ou superior.
@@ -31,6 +34,10 @@ $router->get('/authors/{id:int}', [AuthorController::class, 'show']);
 
 $router->get('/mangas', [MangaController::class, 'index']);
 $router->get('/mangas/{id:int}', [MangaController::class, 'show']);
+$router->get('/mangas/slug/{slug:str}', [MangaController::class, 'showBySlug']);
+
+// Usuários (usado pelo painel administrativo).
+$router->get('/users', [UserController::class, 'index'], ['auth', 'role:moderador']);
 
 $router->group('/categories', function ($router) {
     $router->post('/', [CategoryController::class, 'store']);
@@ -58,6 +65,8 @@ $router->group('/authors', function ($router) {
 
 $router->group('/mangas', function ($router) {
     $router->post('/', [MangaController::class, 'store']);
+    // POST {id} aceita multipart (upload de capa); PUT/PATCH recebem JSON.
+    $router->post('/{id:int}', [MangaController::class, 'update']);
     $router->put('/{id:int}', [MangaController::class, 'update']);
     $router->patch('/{id:int}', [MangaController::class, 'update']);
     $router->post('/{id:int}/status', [MangaController::class, 'toggle']);

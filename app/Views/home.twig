@@ -3,44 +3,31 @@
     <p>Explore mangás, manhwas, manhuas, webtoons e muito mais. Atualizações constantes e uma coleção que cresce todos os dias.</p>
     <div class="hero-actions">
         <a class="btn btn-primary" href="{{ url('/mangas') }}">Explorar catálogo</a>
-        {% if not logged %}
-            <a class="btn btn-ghost" href="{{ url('/register') }}">Criar conta grátis</a>
-        {% else %}
+        {% if auth.check %}
             <a class="btn btn-ghost" href="{{ url('/dashboard') }}">Minha conta</a>
+        {% else %}
+            <a class="btn btn-ghost" href="{{ url('/register') }}">Criar conta grátis</a>
         {% endif %}
     </div>
 </section>
 
-{% if categories is not empty %}
-<section class="section">
+<section class="section" id="home-categories-section" hidden>
     <div class="section-head">
         <h2 class="section-title">Categorias</h2>
         <a class="see-all" href="{{ url('/mangas') }}">Ver todas →</a>
     </div>
-    <div class="chips">
-        {% for category in categories %}
-            <a class="chip" href="{{ url('/mangas') }}?category={{ category.id }}">{{ category.name }}</a>
-        {% endfor %}
-    </div>
+    <div class="chips" id="home-categories"></div>
 </section>
-{% endif %}
 
 <section class="section">
     <div class="section-head">
         <h2 class="section-title">Em <span class="accent">destaque</span></h2>
         <a class="see-all" href="{{ url('/mangas') }}">Ver catálogo →</a>
     </div>
-
-    {% if featured is not empty %}
-        <div class="grid-mangas">
-            {% for manga in featured %}
-                {% include 'partials/manga-card.twig' with {manga: manga} only %}
-            {% endfor %}
-        </div>
-    {% else %}
+    <div class="grid-mangas" id="home-featured">
         <div class="empty">
             <div class="big">📚</div>
-            <p>Nenhum mangá publicado ainda. Volte em breve!</p>
+            <p>Carregando destaques…</p>
         </div>
-    {% endif %}
+    </div>
 </section>

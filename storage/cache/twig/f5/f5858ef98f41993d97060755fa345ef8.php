@@ -48,35 +48,25 @@ class __TwigTemplate_abd6986bb17c1d3e57aae3dda7592745 extends Template
     <div class=\"card\">
         <h1>Entrar</h1>
 
-        ";
-        // line 5
-        if ((($tmp = ($context["error"] ?? null)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 6
-            yield "            <div class=\"alert alert-error\">";
-            yield (string) $this->escaper->escape(($context["error"] ?? null), "html", null, true);
-            yield "</div>
-        ";
-        }
-        // line 8
-        yield "
-        <form method=\"post\" action=\"";
-        // line 9
-        yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->url("/login"), "html", null, true);
-        yield "\">
+        <div class=\"alert alert-error\" id=\"login-alert\" hidden></div>
+        <div class=\"alert alert-success\" id=\"login-success\" hidden></div>
+
+        <form id=\"login-form\" novalidate>
             <label>
                 E-mail ou nome de usuário
-                <input type=\"text\" name=\"login\" value=\"";
-        // line 12
-        yield (string) $this->escaper->escape(((array_key_exists("identifier", $context)) ? (Twig\Extension\CoreExtension::default(($context["identifier"] ?? null), "")) : ("")), "html", null, true);
-        yield "\" required autofocus>
+                <input type=\"text\" name=\"login\" required autofocus autocomplete=\"username\">
             </label>
             <label>
                 Senha
-                <input type=\"password\" name=\"password\" required>
+                <input type=\"password\" name=\"password\" required autocomplete=\"current-password\">
             </label>
-            <button type=\"submit\" class=\"btn btn-primary btn-block\">Entrar</button>
+            <button type=\"submit\" class=\"btn btn-primary btn-block\" data-loading-text=\"Entrando…\">Entrar</button>
         </form>
 
+        <p class=\"auth-switch\"><a href=\"";
+        // line 20
+        yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->url("/forgot-password"), "html", null, true);
+        yield "\">Esqueci minha senha</a></p>
         <p class=\"auth-switch\">Não tem conta? <a href=\"";
         // line 21
         yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->url("/register"), "html", null, true);
@@ -116,7 +106,7 @@ class __TwigTemplate_abd6986bb17c1d3e57aae3dda7592745 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  82 => 21,  70 => 12,  64 => 9,  61 => 8,  55 => 6,  53 => 5,  47 => 1,);
+        return array (  72 => 21,  68 => 20,  47 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -125,22 +115,22 @@ class __TwigTemplate_abd6986bb17c1d3e57aae3dda7592745 extends Template
     <div class=\"card\">
         <h1>Entrar</h1>
 
-        {% if error %}
-            <div class=\"alert alert-error\">{{ error }}</div>
-        {% endif %}
+        <div class=\"alert alert-error\" id=\"login-alert\" hidden></div>
+        <div class=\"alert alert-success\" id=\"login-success\" hidden></div>
 
-        <form method=\"post\" action=\"{{ url(\x27/login\x27) }}\">
+        <form id=\"login-form\" novalidate>
             <label>
                 E-mail ou nome de usuário
-                <input type=\"text\" name=\"login\" value=\"{{ identifier|default(\x27\x27) }}\" required autofocus>
+                <input type=\"text\" name=\"login\" required autofocus autocomplete=\"username\">
             </label>
             <label>
                 Senha
-                <input type=\"password\" name=\"password\" required>
+                <input type=\"password\" name=\"password\" required autocomplete=\"current-password\">
             </label>
-            <button type=\"submit\" class=\"btn btn-primary btn-block\">Entrar</button>
+            <button type=\"submit\" class=\"btn btn-primary btn-block\" data-loading-text=\"Entrando…\">Entrar</button>
         </form>
 
+        <p class=\"auth-switch\"><a href=\"{{ url(\x27/forgot-password\x27) }}\">Esqueci minha senha</a></p>
         <p class=\"auth-switch\">Não tem conta? <a href=\"{{ url(\x27/register\x27) }}\">Criar conta</a></p>
     </div>
 </div>

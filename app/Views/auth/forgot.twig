@@ -1,0 +1,19 @@
+<div class="auth-wrap">
+    <div class="card">
+        <h1>Recuperar senha</h1>
+        <p class="muted">Informe o e-mail da sua conta e enviaremos um link para redefinir a senha.</p>
+
+        <div class="alert alert-error" id="forgot-alert" hidden></div>
+        <div class="alert alert-success" id="forgot-success" hidden></div>
+
+        <form id="forgot-form" novalidate>
+            <label>
+                E-mail
+                <input type="email" name="email" required autofocus autocomplete="email">
+            </label>
+            <button type="submit" class="btn btn-primary btn-block" data-loading-text="Enviando…">Enviar link</button>
+        </form>
+
+        <p class="auth-switch">Lembrou a senha? <a href="{{ url('/login') }}">Entrar</a></p>
+    </div>
+</div>

@@ -3,28 +3,22 @@
     <a class="btn-link" href="{{ url('/admin/categories') }}">&larr; Voltar</a>
 </div>
 
-{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+<div class="alert alert-error" id="entity-alert" hidden></div>
 
 <section class="card">
-    <form method="post" action="{{ url('/admin/categories/' ~ category.id) }}">
+    <form id="entity-edit-form">
         <label>
             Nome
-            <input type="text" name="name" maxlength="120" value="{{ old.name|default(category.name) }}" required autofocus>
+            <input type="text" name="name" maxlength="120" required autofocus>
         </label>
-        {% if errors.name is defined and errors.name|length %}
-            <div class="field-error">{{ errors.name[0] }}</div>
-        {% endif %}
 
         <label>
             Descrição (opcional)
-            <textarea name="description" maxlength="1000">{{ old.description|default(category.description) }}</textarea>
+            <textarea name="description" maxlength="1000"></textarea>
         </label>
-        {% if errors.description is defined and errors.description|length %}
-            <div class="field-error">{{ errors.description[0] }}</div>
-        {% endif %}
 
         <p class="muted" style="font-size: 13px;">
-            Slug (gerado automaticamente): <code>{{ category.slug }}</code>
+            Slug (gerado automaticamente): <code id="entity-slug"></code>
         </p>
 
         <button type="submit">Salvar alterações</button>

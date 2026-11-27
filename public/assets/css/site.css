@@ -177,6 +177,22 @@ img { max-width: 100%; display: block; }
 .btn-block { width: 100%; }
 .link-btn { background: none; border: none; color: var(--muted); font: inherit; font-weight: 600; cursor: pointer; padding: 8px 10px; border-radius: 999px; }
 .link-btn:hover { color: var(--text); background: rgba(255, 255, 255, .06); }
+.btn:disabled { cursor: progress; opacity: .85; }
+.btn.is-loading { filter: brightness(.96); pointer-events: none; }
+
+/* Spinner exibido no botão durante requisições (login/registro). */
+.spinner {
+    width: 15px; height: 15px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, .35);
+    border-top-color: #fff;
+    animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+    .spinner { animation-duration: 1.6s; }
+}
 
 /* ---------- Hero ---------- */
 .hero {
@@ -329,6 +345,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--brand); box-shad
 .alert-error { background: rgba(248, 113, 113, .14); color: #fca5a5; border: 1px solid rgba(248, 113, 113, .3); }
 .alert-success { background: rgba(52, 211, 153, .14); color: #6ee7b7; border: 1px solid rgba(52, 211, 153, .3); }
 .field-error { color: var(--danger); font-size: 13px; margin: -8px 0 14px; }
+.field-error::before { content: "⚠ "; }
+input[aria-invalid="true"] {
+    border-color: rgba(248, 113, 113, .75);
+    box-shadow: 0 0 0 3px rgba(248, 113, 113, .14);
+}
+form[aria-busy="true"] label { opacity: .7; }
 
 /* ---------- Dashboard ---------- */
 .page-head { display: flex; align-items: center; flex-wrap: wrap; justify-content: space-between; gap: 12px 16px; margin: 30px 0 20px; }

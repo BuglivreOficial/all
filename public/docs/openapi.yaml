@@ -107,6 +107,50 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+  /auth/forgot-password:
+    post:
+      tags: [Auth]
+      summary: Solicita o link de redefinição de senha
+      description: 'Envia (por e-mail) um link com token para redefinir a senha. A resposta é genérica para não revelar se o e-mail existe.'
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ForgotPasswordInput' }
+      responses:
+        '200':
+          description: Solicitação processada
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MessageSuccess' }
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          description: Muitas tentativas (rate limit)
+
+  /auth/reset-password:
+    post:
+      tags: [Auth]
+      summary: Redefine a senha com o token recebido
+      description: 'Consome o token e define a nova senha. Revoga todas as sessões/tokens do usuário.'
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ResetPasswordInput' }
+      responses:
+        '200':
+          description: Senha redefinida
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MessageSuccess' }
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          description: Muitas tentativas (rate limit)
+
   /categories:
     get:
       tags: [Categories]
@@ -806,6 +850,18 @@ components:
       properties:
         login: { type: string, description: "E-mail ou nome de usuário", example: "ana" }
         password: { type: string, format: password }
+    ForgotPasswordInput:
+      type: object
+      required: [email]
+      properties:
+        email: { type: string, format: email, example: "ana@exemplo.com" }
+    ResetPasswordInput:
+      type: object
+      required: [token, password, password_confirmation]
+      properties:
+        token: { type: string, description: "Token recebido por e-mail no link de redefinição" }
+        password: { type: string, minLength: 8, format: password }
+        password_confirmation: { type: string, format: password }
     CategoryInput:
       type: object
       required: [name]

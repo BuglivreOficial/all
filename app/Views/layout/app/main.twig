@@ -43,9 +43,7 @@
                         <a class="btn btn-ghost" href="{{ url('/admin') }}">Admin</a>
                     {% endif %}
                     <a class="btn btn-ghost" href="{{ url('/dashboard') }}">{{ auth.name|default('Conta') }}</a>
-                    <form method="post" action="{{ url('/logout') }}">
-                        <button type="submit" class="link-btn">Sair</button>
-                    </form>
+                    <button type="button" class="link-btn" data-action="logout">Sair</button>
                 {% else %}
                     <a class="btn btn-ghost" href="{{ url('/login') }}">Entrar</a>
                     <a class="btn btn-primary" href="{{ url('/register') }}">Criar conta</a>
@@ -68,5 +66,18 @@
         </span>
     </div>
 </footer>
+
+<script>
+window.BUGLIVRE = {
+    page: {{ page|default('')|json_encode|raw }},
+    mode: {{ mode|default('')|json_encode|raw }},
+    id: {{ id|default(null)|json_encode|raw }},
+    slug: {{ slug|default('')|json_encode|raw }},
+    token: {{ token|default('')|json_encode|raw }},
+    auth: {{ auth|json_encode|raw }}
+};
+</script>
+<script src="{{ asset('js/api.js') }}"></script>
+<script src="{{ asset('js/site.js') }}"></script>
 </body>
 </html>

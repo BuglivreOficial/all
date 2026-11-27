@@ -84,6 +84,14 @@ class User {
     }
 
     /**
+     * Redefine a senha do usuário (hash via password_hash).
+     */
+    public static function updatePassword(int $id, string $plainPassword): void {
+        $stmt = Connection::pdo()->prepare('UPDATE users SET password = ? WHERE id = ?');
+        $stmt->execute([password_hash($plainPassword, PASSWORD_DEFAULT), $id]);
+    }
+
+    /**
      * Indica se o usuário possui um dos perfis informados, respeitando a hierarquia.
      * Ex.: um admin (nível 5) satisfaz 'moderador' (nível 3).
      *

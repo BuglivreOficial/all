@@ -1,16 +1,8 @@
-<div class="page-head">
-    <h1>Olá, {{ user.name }}</h1>
-    <a class="btn btn-ghost" href="{{ url('/') }}">Ver site</a>
-</div>
-
-<div class="card">
-    <p class="muted">Você está autenticado na área web (sessão).</p>
-    <dl style="display: grid; grid-template-columns: auto 1fr; gap: 10px 20px; margin: 0;">
-        <dt class="muted">ID</dt><dd style="margin: 0;">{{ user.id }}</dd>
-        <dt class="muted">Nome</dt><dd style="margin: 0;">{{ user.name }}</dd>
-        <dt class="muted">Usuário</dt><dd style="margin: 0;">{{ user.username }}</dd>
-        <dt class="muted">E-mail</dt><dd style="margin: 0;">{{ user.email }}</dd>
-        <dt class="muted">Perfil</dt><dd style="margin: 0;"><span class="badge">{{ role_labels[user.role]|default(user.role) }}</span></dd>
-        <dt class="muted">Desde</dt><dd style="margin: 0;">{{ user.created_at }}</dd>
-    </dl>
+<div id="dashboard-body">
+    <div class="page-head">
+        <h1>Painel</h1>
+    </div>
+    <div class="card">
+        <p class="muted">Carregando seus dados…</p>
+    </div>
 </div>

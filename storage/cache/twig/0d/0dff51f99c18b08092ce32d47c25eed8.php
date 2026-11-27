@@ -135,25 +135,20 @@ class __TwigTemplate_3afbe296fd62bf8d7313e8cdc810a8b0 extends Template
             yield "\">";
             yield (string) $this->escaper->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["auth"] ?? null), "name", [], "any", true, true, false, 45)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["auth"] ?? null), "name", [], "any", false, false, false, 45), "Conta")) : ("Conta")), "html", null, true);
             yield "</a>
-                    <form method=\"post\" action=\"";
-            // line 46
-            yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->url("/logout"), "html", null, true);
-            yield "\">
-                        <button type=\"submit\" class=\"link-btn\">Sair</button>
-                    </form>
+                    <button type=\"button\" class=\"link-btn\" data-action=\"logout\">Sair</button>
                 ";
         } else {
-            // line 50
+            // line 48
             yield "                    <a class=\"btn btn-ghost\" href=\"";
             yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->url("/login"), "html", null, true);
             yield "\">Entrar</a>
                     <a class=\"btn btn-primary\" href=\"";
-            // line 51
+            // line 49
             yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->url("/register"), "html", null, true);
             yield "\">Criar conta</a>
                 ";
         }
-        // line 53
+        // line 51
         yield "            </div>
         </div>
     </div>
@@ -161,7 +156,7 @@ class __TwigTemplate_3afbe296fd62bf8d7313e8cdc810a8b0 extends Template
 
 <main class=\"container\">
     ";
-        // line 59
+        // line 57
         yield (string) ($context["content"] ?? null);
         yield "
 </main>
@@ -169,23 +164,60 @@ class __TwigTemplate_3afbe296fd62bf8d7313e8cdc810a8b0 extends Template
 <footer class=\"footer\">
     <div class=\"container footer-inner\">
         <span>&copy; ";
-        // line 64
+        // line 62
         yield (string) $this->escaper->escape(($context["year"] ?? null), "html", null, true);
         yield " ";
         yield (string) $this->escaper->escape(($context["app_name"] ?? null), "html", null, true);
         yield " — Todos os direitos reservados.</span>
         <span>
             <a href=\"";
-        // line 66
+        // line 64
         yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->url("/mangas"), "html", null, true);
         yield "\">Catálogo</a> ·
             <a href=\"";
-        // line 67
+        // line 65
         yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->url("/login"), "html", null, true);
         yield "\">Entrar</a>
         </span>
     </div>
 </footer>
+
+<script>
+window.BUGLIVRE = {
+    page: ";
+        // line 72
+        yield (string) json_encode(((array_key_exists("page", $context)) ? (Twig\Extension\CoreExtension::default(($context["page"] ?? null), "")) : ("")));
+        yield ",
+    mode: ";
+        // line 73
+        yield (string) json_encode(((array_key_exists("mode", $context)) ? (Twig\Extension\CoreExtension::default(($context["mode"] ?? null), "")) : ("")));
+        yield ",
+    id: ";
+        // line 74
+        yield (string) json_encode(((array_key_exists("id", $context)) ? (Twig\Extension\CoreExtension::default(($context["id"] ?? null), null)) : (null)));
+        yield ",
+    slug: ";
+        // line 75
+        yield (string) json_encode(((array_key_exists("slug", $context)) ? (Twig\Extension\CoreExtension::default(($context["slug"] ?? null), "")) : ("")));
+        yield ",
+    token: ";
+        // line 76
+        yield (string) json_encode(((array_key_exists("token", $context)) ? (Twig\Extension\CoreExtension::default(($context["token"] ?? null), "")) : ("")));
+        yield ",
+    auth: ";
+        // line 77
+        yield (string) json_encode(($context["auth"] ?? null));
+        yield "
+};
+</script>
+<script src=\"";
+        // line 80
+        yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->asset("js/api.js"), "html", null, true);
+        yield "\"></script>
+<script src=\"";
+        // line 81
+        yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->asset("js/site.js"), "html", null, true);
+        yield "\"></script>
 </body>
 </html>
 ";
@@ -221,7 +253,7 @@ class __TwigTemplate_3afbe296fd62bf8d7313e8cdc810a8b0 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  184 => 67,  180 => 66,  173 => 64,  165 => 59,  157 => 53,  152 => 51,  147 => 50,  140 => 46,  133 => 45,  127 => 43,  124 => 42,  122 => 41,  115 => 37,  111 => 36,  103 => 33,  97 => 32,  89 => 27,  73 => 16,  65 => 11,  56 => 7,  49 => 2,  47 => 1,);
+        return array (  219 => 81,  215 => 80,  209 => 77,  205 => 76,  201 => 75,  197 => 74,  193 => 73,  189 => 72,  179 => 65,  175 => 64,  168 => 62,  160 => 57,  152 => 51,  147 => 49,  142 => 48,  133 => 45,  127 => 43,  124 => 42,  122 => 41,  115 => 37,  111 => 36,  103 => 33,  97 => 32,  89 => 27,  73 => 16,  65 => 11,  56 => 7,  49 => 2,  47 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -271,9 +303,7 @@ class __TwigTemplate_3afbe296fd62bf8d7313e8cdc810a8b0 extends Template
                         <a class=\"btn btn-ghost\" href=\"{{ url(\x27/admin\x27) }}\">Admin</a>
                     {% endif %}
                     <a class=\"btn btn-ghost\" href=\"{{ url(\x27/dashboard\x27) }}\">{{ auth.name|default(\x27Conta\x27) }}</a>
-                    <form method=\"post\" action=\"{{ url(\x27/logout\x27) }}\">
-                        <button type=\"submit\" class=\"link-btn\">Sair</button>
-                    </form>
+                    <button type=\"button\" class=\"link-btn\" data-action=\"logout\">Sair</button>
                 {% else %}
                     <a class=\"btn btn-ghost\" href=\"{{ url(\x27/login\x27) }}\">Entrar</a>
                     <a class=\"btn btn-primary\" href=\"{{ url(\x27/register\x27) }}\">Criar conta</a>
@@ -296,6 +326,19 @@ class __TwigTemplate_3afbe296fd62bf8d7313e8cdc810a8b0 extends Template
         </span>
     </div>
 </footer>
+
+<script>
+window.BUGLIVRE = {
+    page: {{ page|default(\x27\x27)|json_encode|raw }},
+    mode: {{ mode|default(\x27\x27)|json_encode|raw }},
+    id: {{ id|default(null)|json_encode|raw }},
+    slug: {{ slug|default(\x27\x27)|json_encode|raw }},
+    token: {{ token|default(\x27\x27)|json_encode|raw }},
+    auth: {{ auth|json_encode|raw }}
+};
+</script>
+<script src=\"{{ asset(\x27js/api.js\x27) }}\"></script>
+<script src=\"{{ asset(\x27js/site.js\x27) }}\"></script>
 </body>
 </html>
 ", "layout/app/main.twig", "D:\\buglivreoficial\\app\\Views\\layout\\app\\main.twig");

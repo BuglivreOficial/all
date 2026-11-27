@@ -2,31 +2,23 @@
     <h1>Autores</h1>
 </div>
 
-{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
-{% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
-{% if errors is not empty %}<div class="alert alert-error">Corrija os campos destacados abaixo.</div>{% endif %}
+<div class="alert alert-error" id="entity-alert" hidden></div>
 
 <section class="card">
     <h2>Novo autor</h2>
-    <form method="post" action="{{ url('/admin/authors') }}">
+    <form id="entity-create-form">
         <div class="form-grid">
             <div>
                 <label>
                     Nome
-                    <input type="text" name="name" maxlength="150" value="{{ old.name|default('') }}" required autofocus>
+                    <input type="text" name="name" maxlength="150" required autofocus>
                 </label>
-                {% if errors.name is defined and errors.name|length %}
-                    <div class="field-error">{{ errors.name[0] }}</div>
-                {% endif %}
             </div>
             <div>
                 <label>
                     Biografia (opcional)
-                    <textarea name="bio" maxlength="3000" placeholder="Breve biografia do autor.">{{ old.bio|default('') }}</textarea>
+                    <textarea name="bio" maxlength="3000" placeholder="Breve biografia do autor."></textarea>
                 </label>
-                {% if errors.bio is defined and errors.bio|length %}
-                    <div class="field-error">{{ errors.bio[0] }}</div>
-                {% endif %}
             </div>
         </div>
         <button type="submit">Criar autor</button>
@@ -47,38 +39,8 @@
                 <th>Ações</th>
             </tr>
         </thead>
-        <tbody>
-            {% for author in authors %}
-                <tr>
-                    <td>{{ author.id }}</td>
-                    <td>{{ author.name }}</td>
-                    <td class="muted">{{ author.slug }}</td>
-                    <td class="muted">{{ author.bio|excerpt(80) }}</td>
-                    <td>
-                        <span class="badge {{ author.is_active ? '' : 'badge-off' }}">
-                            {{ author.is_active ? 'Ativo' : 'Inativo' }}
-                        </span>
-                    </td>
-                    <td>
-                        <div class="actions">
-                            <a class="btn-link" href="{{ url('/admin/authors/' ~ author.id ~ '/edit') }}">Editar</a>
-
-                            <form method="post" action="{{ url('/admin/authors/' ~ author.id ~ '/status') }}">
-                                <button type="submit" class="btn-muted btn-sm">
-                                    {{ author.is_active ? 'Desativar' : 'Ativar' }}
-                                </button>
-                            </form>
-
-                            <form method="post" action="{{ url('/admin/authors/' ~ author.id ~ '/delete') }}"
-                                  onsubmit="return confirm('Excluir o autor &quot;{{ author.name }}&quot;? Esta ação não pode ser desfeita.');">
-                                <button type="submit" class="btn-danger btn-sm">Excluir</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-            {% else %}
-                <tr><td colspan="6" class="muted">Nenhum autor cadastrado.</td></tr>
-            {% endfor %}
+        <tbody id="entity-table-body">
+            <tr><td colspan="6" class="muted">Carregando autores…</td></tr>
         </tbody>
     </table>
 </section>

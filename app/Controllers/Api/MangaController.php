@@ -3,6 +3,7 @@ namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
 use App\Models\Manga;
+use App\Services\CoverStorage;
 use Core\Exceptions\HttpException;
 use Core\Exceptions\ValidationException;
 use Core\Http\Response;
@@ -32,9 +33,20 @@ class MangaController extends BaseController {
         return $this->ok($this->findOrFail($id)->toArray());
     }
 
+    public function showBySlug(string $slug): Response {
+        $manga = Manga::findBySlug($slug);
+
+        if ($manga === null || !$manga->is_active) {
+            throw new HttpException(404, 'Mangá não encontrado.');
+        }
+
+        return $this->ok($manga->toArray());
+    }
+
     public function store(): Response {
         try {
             $data = Manga::validate($this->request->all());
+            $data['cover'] = $this->resolveCover($data['cover']);
         } catch (ValidationException $e) {
             return $this->error('Dados inválidos.', 422, $e->errors());
         }
@@ -55,6 +67,7 @@ class MangaController extends BaseController {
 
         try {
             $data = Manga::validate($this->request->all(), $id);
+            $data['cover'] = $this->resolveCover($data['cover']);
         } catch (ValidationException $e) {
             return $this->error('Dados inválidos.', 422, $e->errors());
         }
@@ -91,6 +104,20 @@ class MangaController extends BaseController {
         $this->logger()->info('Mangá excluído via API', ['manga_id' => $id]);
 
         return $this->ok(null, 'Mangá excluído.');
+    }
+
+    /**
+     * Usa o caminho informado ou, se houver arquivo enviado (multipart), salva a capa.
+     *
+     * @throws ValidationException
+     */
+    private function resolveCover(?string $url): ?string {
+        $file = $this->request->file('cover_file');
+        if ($file === null || (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+            return $url;
+        }
+
+        return (new CoverStorage())->upload($file, 'covers');
     }
 
     private function findOrFail(int $id): Manga {

@@ -2,31 +2,23 @@
     <h1>Categorias de mangás</h1>
 </div>
 
-{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
-{% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
-{% if errors is not empty %}<div class="alert alert-error">Corrija os campos destacados abaixo.</div>{% endif %}
+<div class="alert alert-error" id="entity-alert" hidden></div>
 
 <section class="card">
     <h2>Nova categoria</h2>
-    <form method="post" action="{{ url('/admin/categories') }}">
+    <form id="entity-create-form">
         <div class="form-grid">
             <div>
                 <label>
                     Nome
-                    <input type="text" name="name" maxlength="120" value="{{ old.name|default('') }}" required autofocus>
+                    <input type="text" name="name" maxlength="120" required autofocus>
                 </label>
-                {% if errors.name is defined and errors.name|length %}
-                    <div class="field-error">{{ errors.name[0] }}</div>
-                {% endif %}
             </div>
             <div>
                 <label>
                     Descrição (opcional)
-                    <textarea name="description" maxlength="1000" placeholder="Breve descrição da categoria.">{{ old.description|default('') }}</textarea>
+                    <textarea name="description" maxlength="1000" placeholder="Breve descrição da categoria."></textarea>
                 </label>
-                {% if errors.description is defined and errors.description|length %}
-                    <div class="field-error">{{ errors.description[0] }}</div>
-                {% endif %}
             </div>
         </div>
         <button type="submit">Criar categoria</button>
@@ -47,38 +39,8 @@
                 <th>Ações</th>
             </tr>
         </thead>
-        <tbody>
-            {% for category in categories %}
-                <tr>
-                    <td>{{ category.id }}</td>
-                    <td>{{ category.name }}</td>
-                    <td class="muted">{{ category.slug }}</td>
-                    <td class="muted">{{ category.description|excerpt(80) }}</td>
-                    <td>
-                        <span class="badge {{ category.is_active ? '' : 'badge-off' }}">
-                            {{ category.is_active ? 'Ativa' : 'Inativa' }}
-                        </span>
-                    </td>
-                    <td>
-                        <div class="actions">
-                            <a class="btn-link" href="{{ url('/admin/categories/' ~ category.id ~ '/edit') }}">Editar</a>
-
-                            <form method="post" action="{{ url('/admin/categories/' ~ category.id ~ '/status') }}">
-                                <button type="submit" class="btn-muted btn-sm">
-                                    {{ category.is_active ? 'Desativar' : 'Ativar' }}
-                                </button>
-                            </form>
-
-                            <form method="post" action="{{ url('/admin/categories/' ~ category.id ~ '/delete') }}"
-                                  onsubmit="return confirm('Excluir a categoria &quot;{{ category.name }}&quot;? Esta ação não pode ser desfeita.');">
-                                <button type="submit" class="btn-danger btn-sm">Excluir</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-            {% else %}
-                <tr><td colspan="6" class="muted">Nenhuma categoria cadastrada.</td></tr>
-            {% endfor %}
+        <tbody id="entity-table-body">
+            <tr><td colspan="6" class="muted">Carregando categorias…</td></tr>
         </tbody>
     </table>
 </section>

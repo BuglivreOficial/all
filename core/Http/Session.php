@@ -4,6 +4,15 @@ namespace Core\Http;
 class Session {
     public static function start(): void {
         if (session_status() === PHP_SESSION_NONE) {
+            if (PHP_SAPI !== 'cli') {
+                // SameSite=Lax reduz o risco de CSRF nas mutações feitas por cookie.
+                session_set_cookie_params([
+                    'lifetime' => 0,
+                    'path' => '/',
+                    'httponly' => true,
+                    'samesite' => 'Lax',
+                ]);
+            }
             session_start();
         }
     }

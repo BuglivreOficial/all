@@ -22,11 +22,12 @@ class Router {
 
     /**
      * Apelidos de middleware usados nas rotas.
-     * Ex.: 'auth' ou 'role:admin,moderador'.
+     * Ex.: 'auth', 'role:admin,moderador' ou 'throttle:60,1'.
      */
     private const MIDDLEWARE_ALIASES = [
         'auth' => \App\Middleware\Authenticate::class,
         'role' => \App\Middleware\EnsureRole::class,
+        'throttle' => \App\Middleware\ThrottleRequests::class,
     ];
 
     private array $staticRoutes = [];   // rotas sem parâmetros, indexadas por [método][caminho]

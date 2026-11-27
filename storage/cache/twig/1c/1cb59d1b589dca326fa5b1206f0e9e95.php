@@ -146,21 +146,50 @@ class __TwigTemplate_1d3c5f6b33a74b2c35694eb6b73494ea extends Template
             ";
         }
         // line 48
-        yield "            <form method=\"post\" action=\"";
-        yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->url("/logout"), "html", null, true);
-        yield "\">
-                <button type=\"submit\" class=\"btn-link\">Sair</button>
-            </form>
+        yield "            <button type=\"button\" class=\"btn-link\" data-action=\"logout\">Sair</button>
         </div>
     </aside>
 
     <div class=\"main\">
         ";
-        // line 55
+        // line 53
         yield (string) ($context["content"] ?? null);
         yield "
     </div>
 </div>
+
+<script>
+window.BUGLIVRE = {
+    page: ";
+        // line 59
+        yield (string) json_encode(((array_key_exists("page", $context)) ? (Twig\Extension\CoreExtension::default(($context["page"] ?? null), "")) : ("")));
+        yield ",
+    mode: ";
+        // line 60
+        yield (string) json_encode(((array_key_exists("mode", $context)) ? (Twig\Extension\CoreExtension::default(($context["mode"] ?? null), "")) : ("")));
+        yield ",
+    id: ";
+        // line 61
+        yield (string) json_encode(((array_key_exists("id", $context)) ? (Twig\Extension\CoreExtension::default(($context["id"] ?? null), null)) : (null)));
+        yield ",
+    slug: ";
+        // line 62
+        yield (string) json_encode(((array_key_exists("slug", $context)) ? (Twig\Extension\CoreExtension::default(($context["slug"] ?? null), "")) : ("")));
+        yield ",
+    auth: ";
+        // line 63
+        yield (string) json_encode(($context["auth"] ?? null));
+        yield "
+};
+</script>
+<script src=\"";
+        // line 66
+        yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->asset("js/api.js"), "html", null, true);
+        yield "\"></script>
+<script src=\"";
+        // line 67
+        yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->asset("js/admin.js"), "html", null, true);
+        yield "\"></script>
 </body>
 </html>
 ";
@@ -196,7 +225,7 @@ class __TwigTemplate_1d3c5f6b33a74b2c35694eb6b73494ea extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  160 => 55,  149 => 48,  144 => 46,  139 => 45,  137 => 44,  130 => 40,  126 => 39,  114 => 32,  106 => 29,  98 => 26,  90 => 23,  82 => 20,  73 => 16,  65 => 11,  56 => 7,  49 => 2,  47 => 1,);
+        return array (  191 => 67,  187 => 66,  181 => 63,  177 => 62,  173 => 61,  169 => 60,  165 => 59,  156 => 53,  149 => 48,  144 => 46,  139 => 45,  137 => 44,  130 => 40,  126 => 39,  114 => 32,  106 => 29,  98 => 26,  90 => 23,  82 => 20,  73 => 16,  65 => 11,  56 => 7,  49 => 2,  47 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -248,9 +277,7 @@ class __TwigTemplate_1d3c5f6b33a74b2c35694eb6b73494ea extends Template
                 <strong>{{ auth.name }}</strong>
                 <span class=\"role\">{{ role_labels[auth.role]|default(auth.role) }}</span>
             {% endif %}
-            <form method=\"post\" action=\"{{ url(\x27/logout\x27) }}\">
-                <button type=\"submit\" class=\"btn-link\">Sair</button>
-            </form>
+            <button type=\"button\" class=\"btn-link\" data-action=\"logout\">Sair</button>
         </div>
     </aside>
 
@@ -258,6 +285,18 @@ class __TwigTemplate_1d3c5f6b33a74b2c35694eb6b73494ea extends Template
         {{ content|raw }}
     </div>
 </div>
+
+<script>
+window.BUGLIVRE = {
+    page: {{ page|default(\x27\x27)|json_encode|raw }},
+    mode: {{ mode|default(\x27\x27)|json_encode|raw }},
+    id: {{ id|default(null)|json_encode|raw }},
+    slug: {{ slug|default(\x27\x27)|json_encode|raw }},
+    auth: {{ auth|json_encode|raw }}
+};
+</script>
+<script src=\"{{ asset(\x27js/api.js\x27) }}\"></script>
+<script src=\"{{ asset(\x27js/admin.js\x27) }}\"></script>
 </body>
 </html>
 ", "layout/admin/main.twig", "D:\\buglivreoficial\\app\\Views\\layout\\admin\\main.twig");

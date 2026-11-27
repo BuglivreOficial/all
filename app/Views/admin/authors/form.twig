@@ -3,28 +3,22 @@
     <a class="btn-link" href="{{ url('/admin/authors') }}">&larr; Voltar</a>
 </div>
 
-{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+<div class="alert alert-error" id="entity-alert" hidden></div>
 
 <section class="card">
-    <form method="post" action="{{ url('/admin/authors/' ~ author.id) }}">
+    <form id="entity-edit-form">
         <label>
             Nome
-            <input type="text" name="name" maxlength="150" value="{{ old.name|default(author.name) }}" required autofocus>
+            <input type="text" name="name" maxlength="150" required autofocus>
         </label>
-        {% if errors.name is defined and errors.name|length %}
-            <div class="field-error">{{ errors.name[0] }}</div>
-        {% endif %}
 
         <label>
             Biografia (opcional)
-            <textarea name="bio" maxlength="3000">{{ old.bio|default(author.bio) }}</textarea>
+            <textarea name="bio" maxlength="3000"></textarea>
         </label>
-        {% if errors.bio is defined and errors.bio|length %}
-            <div class="field-error">{{ errors.bio[0] }}</div>
-        {% endif %}
 
         <p class="muted" style="font-size: 13px;">
-            Slug (gerado automaticamente): <code>{{ author.slug }}</code>
+            Slug (gerado automaticamente): <code id="entity-slug"></code>
         </p>
 
         <button type="submit">Salvar alterações</button>

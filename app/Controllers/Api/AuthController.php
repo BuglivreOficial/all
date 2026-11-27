@@ -1,10 +1,13 @@
 <?php
 namespace App\Controllers\Api;
 
+use App\Auth\Auth;
 use App\Controllers\BaseController;
+use App\Models\User;
 use App\Services\AuthService;
 use Core\Exceptions\ValidationException;
 use Core\Http\Response;
+use Core\Http\Session;
 
 class AuthController extends BaseController {
     private AuthService $auth;
@@ -26,6 +29,7 @@ class AuthController extends BaseController {
             return $this->error('Dados inválidos.', 422, $e->errors());
         }
 
+        $this->startSession($result['user']);
         $this->logger()->info('Usuário registrado', ['user_id' => $result['user']->id]);
 
         return $this->created([
@@ -50,6 +54,7 @@ class AuthController extends BaseController {
             return $this->error('Credenciais inválidas.', 401);
         }
 
+        $this->startSession($result['user']);
         $this->logger()->info('Login via API', ['user_id' => $result['user']->id]);
 
         return $this->ok([
@@ -59,8 +64,41 @@ class AuthController extends BaseController {
         ], 'Login realizado com sucesso.');
     }
 
+    public function forgotPassword(): Response {
+        try {
+            $this->auth->requestPasswordReset((string) $this->request->input('email', ''));
+        } catch (ValidationException $e) {
+            return $this->error('Dados inválidos.', 422, $e->errors());
+        }
+
+        $this->logger()->info('Pedido de redefinição de senha', [
+            'email' => (string) $this->request->input('email', ''),
+            'ip' => $this->request->ip(),
+        ]);
+
+        // Resposta genérica: não revela se o e-mail está cadastrado.
+        return $this->ok(null, 'Se este e-mail estiver cadastrado, enviaremos um link para redefinir a senha.');
+    }
+
+    public function resetPassword(): Response {
+        try {
+            $user = $this->auth->resetPassword($this->request->all());
+        } catch (ValidationException $e) {
+            $this->logger()->warning('Falha ao redefinir senha', [
+                'errors' => $e->errors(),
+                'ip' => $this->request->ip(),
+            ]);
+            return $this->error('Não foi possível redefinir a senha.', 422, $e->errors());
+        }
+
+        $this->logger()->info('Senha redefinida', ['user_id' => $user->id]);
+
+        return $this->ok(null, 'Senha redefinida com sucesso. Faça login com a nova senha.');
+    }
+
     public function me(): Response {
-        $user = $this->auth->userFromToken($this->request->bearerToken());
+        // Aceita a sessão web (cookie) ou o token Bearer.
+        $user = Auth::user($this->request);
 
         if ($user === null) {
             return $this->error('Não autenticado.', 401);
@@ -71,6 +109,8 @@ class AuthController extends BaseController {
 
     public function logout(): Response {
         $this->auth->logout($this->request->bearerToken());
+        Session::destroy();
+
         $this->logger()->info('Logout via API', ['ip' => $this->request->ip()]);
 
         return $this->ok(null, 'Sessão encerrada.');
@@ -87,5 +127,15 @@ class AuthController extends BaseController {
             'token' => $result['token']['token'],
             'expires_at' => $result['token']['expires_at'],
         ], 'Token renovado com sucesso.');
+    }
+
+    /**
+     * Estabelece a sessão web (cookie) compartilhada com a API.
+     */
+    private function startSession(User $user): void {
+        Session::regenerate();
+        Session::set('user_id', $user->id);
+        Session::set('user_name', $user->name);
+        Session::set('user_role', $user->role);
     }
 }

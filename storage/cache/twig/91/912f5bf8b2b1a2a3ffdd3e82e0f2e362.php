@@ -48,90 +48,39 @@ class __TwigTemplate_251d9a600750008bfc784a3a5214ff6f extends Template
     <div class=\"card\">
         <h1>Criar conta</h1>
 
-        ";
-        // line 5
-        if ( !Twig\Extension\CoreExtension::testEmpty(($context["errors"] ?? null))) {
-            // line 6
-            yield "            <div class=\"alert alert-error\">Corrija os campos destacados abaixo.</div>
-        ";
-        }
-        // line 8
-        yield "
-        <form method=\"post\" action=\"";
-        // line 9
-        yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->url("/register"), "html", null, true);
-        yield "\">
+        <div class=\"alert alert-error\" id=\"register-alert\" hidden></div>
+
+        <form id=\"register-form\" novalidate>
             <label>
                 Nome
-                <input type=\"text\" name=\"name\" value=\"";
-        // line 12
-        yield (string) $this->escaper->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["old"] ?? null), "name", [], "any", true, true, false, 12)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["old"] ?? null), "name", [], "any", false, false, false, 12), "")) : ("")), "html", null, true);
-        yield "\" required autofocus>
-            </label>
-            ";
-        // line 14
-        if (CoreExtension::getAttribute($this->env, $this->source, ($context["errors"] ?? null), "name", [], "any", true, true, false, 14)) {
-            yield "<div class=\"field-error\">";
-            yield (string) $this->escaper->escape((($_v0 = CoreExtension::getAttribute($this->env, $this->source, ($context["errors"] ?? null), "name", [], "any", false, false, false, 14)) && is_array($_v0) || $_v0 instanceof ArrayAccess ? ($_v0[0] ?? null) : null), "html", null, true);
-            yield "</div>";
-        }
-        // line 15
-        yield "
-            <label>
-                Nome de usuário
-                <input type=\"text\" name=\"username\" value=\"";
-        // line 18
-        yield (string) $this->escaper->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["old"] ?? null), "username", [], "any", true, true, false, 18)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["old"] ?? null), "username", [], "any", false, false, false, 18), "")) : ("")), "html", null, true);
-        yield "\" required>
-            </label>
-            ";
-        // line 20
-        if (CoreExtension::getAttribute($this->env, $this->source, ($context["errors"] ?? null), "username", [], "any", true, true, false, 20)) {
-            yield "<div class=\"field-error\">";
-            yield (string) $this->escaper->escape((($_v1 = CoreExtension::getAttribute($this->env, $this->source, ($context["errors"] ?? null), "username", [], "any", false, false, false, 20)) && is_array($_v1) || $_v1 instanceof ArrayAccess ? ($_v1[0] ?? null) : null), "html", null, true);
-            yield "</div>";
-        }
-        // line 21
-        yield "
-            <label>
-                E-mail
-                <input type=\"email\" name=\"email\" value=\"";
-        // line 24
-        yield (string) $this->escaper->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["old"] ?? null), "email", [], "any", true, true, false, 24)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["old"] ?? null), "email", [], "any", false, false, false, 24), "")) : ("")), "html", null, true);
-        yield "\" required>
-            </label>
-            ";
-        // line 26
-        if (CoreExtension::getAttribute($this->env, $this->source, ($context["errors"] ?? null), "email", [], "any", true, true, false, 26)) {
-            yield "<div class=\"field-error\">";
-            yield (string) $this->escaper->escape((($_v2 = CoreExtension::getAttribute($this->env, $this->source, ($context["errors"] ?? null), "email", [], "any", false, false, false, 26)) && is_array($_v2) || $_v2 instanceof ArrayAccess ? ($_v2[0] ?? null) : null), "html", null, true);
-            yield "</div>";
-        }
-        // line 27
-        yield "
-            <label>
-                Senha
-                <input type=\"password\" name=\"password\" required>
-            </label>
-            ";
-        // line 32
-        if (CoreExtension::getAttribute($this->env, $this->source, ($context["errors"] ?? null), "password", [], "any", true, true, false, 32)) {
-            yield "<div class=\"field-error\">";
-            yield (string) $this->escaper->escape((($_v3 = CoreExtension::getAttribute($this->env, $this->source, ($context["errors"] ?? null), "password", [], "any", false, false, false, 32)) && is_array($_v3) || $_v3 instanceof ArrayAccess ? ($_v3[0] ?? null) : null), "html", null, true);
-            yield "</div>";
-        }
-        // line 33
-        yield "
-            <label>
-                Confirmar senha
-                <input type=\"password\" name=\"password_confirmation\" required>
+                <input type=\"text\" name=\"name\" required autofocus autocomplete=\"name\">
             </label>
 
-            <button type=\"submit\" class=\"btn btn-primary btn-block\">Criar conta</button>
+            <label>
+                Nome de usuário
+                <input type=\"text\" name=\"username\" required autocomplete=\"username\">
+            </label>
+
+            <label>
+                E-mail
+                <input type=\"email\" name=\"email\" required autocomplete=\"email\">
+            </label>
+
+            <label>
+                Senha
+                <input type=\"password\" name=\"password\" required autocomplete=\"new-password\">
+            </label>
+
+            <label>
+                Confirmar senha
+                <input type=\"password\" name=\"password_confirmation\" required autocomplete=\"new-password\">
+            </label>
+
+            <button type=\"submit\" class=\"btn btn-primary btn-block\" data-loading-text=\"Criando conta…\">Criar conta</button>
         </form>
 
         <p class=\"auth-switch\">Já tem conta? <a href=\"";
-        // line 42
+        // line 36
         yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->url("/login"), "html", null, true);
         yield "\">Entrar</a></p>
     </div>
@@ -169,7 +118,7 @@ class __TwigTemplate_251d9a600750008bfc784a3a5214ff6f extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  135 => 42,  124 => 33,  118 => 32,  111 => 27,  105 => 26,  100 => 24,  95 => 21,  89 => 20,  84 => 18,  79 => 15,  73 => 14,  68 => 12,  62 => 9,  59 => 8,  55 => 6,  53 => 5,  47 => 1,);
+        return array (  84 => 36,  47 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -178,41 +127,35 @@ class __TwigTemplate_251d9a600750008bfc784a3a5214ff6f extends Template
     <div class=\"card\">
         <h1>Criar conta</h1>
 
-        {% if errors is not empty %}
-            <div class=\"alert alert-error\">Corrija os campos destacados abaixo.</div>
-        {% endif %}
+        <div class=\"alert alert-error\" id=\"register-alert\" hidden></div>
 
-        <form method=\"post\" action=\"{{ url(\x27/register\x27) }}\">
+        <form id=\"register-form\" novalidate>
             <label>
                 Nome
-                <input type=\"text\" name=\"name\" value=\"{{ old.name|default(\x27\x27) }}\" required autofocus>
+                <input type=\"text\" name=\"name\" required autofocus autocomplete=\"name\">
             </label>
-            {% if errors.name is defined %}<div class=\"field-error\">{{ errors.name[0] }}</div>{% endif %}
 
             <label>
                 Nome de usuário
-                <input type=\"text\" name=\"username\" value=\"{{ old.username|default(\x27\x27) }}\" required>
+                <input type=\"text\" name=\"username\" required autocomplete=\"username\">
             </label>
-            {% if errors.username is defined %}<div class=\"field-error\">{{ errors.username[0] }}</div>{% endif %}
 
             <label>
                 E-mail
-                <input type=\"email\" name=\"email\" value=\"{{ old.email|default(\x27\x27) }}\" required>
+                <input type=\"email\" name=\"email\" required autocomplete=\"email\">
             </label>
-            {% if errors.email is defined %}<div class=\"field-error\">{{ errors.email[0] }}</div>{% endif %}
 
             <label>
                 Senha
-                <input type=\"password\" name=\"password\" required>
+                <input type=\"password\" name=\"password\" required autocomplete=\"new-password\">
             </label>
-            {% if errors.password is defined %}<div class=\"field-error\">{{ errors.password[0] }}</div>{% endif %}
 
             <label>
                 Confirmar senha
-                <input type=\"password\" name=\"password_confirmation\" required>
+                <input type=\"password\" name=\"password_confirmation\" required autocomplete=\"new-password\">
             </label>
 
-            <button type=\"submit\" class=\"btn btn-primary btn-block\">Criar conta</button>
+            <button type=\"submit\" class=\"btn btn-primary btn-block\" data-loading-text=\"Criando conta…\">Criar conta</button>
         </form>
 
         <p class=\"auth-switch\">Já tem conta? <a href=\"{{ url(\x27/login\x27) }}\">Entrar</a></p>

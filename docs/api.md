@@ -4,8 +4,10 @@ Documentação das rotas JSON da API. Todas as rotas ficam sob o prefixo `/api`
 (registradas em [routes/api.php](file:///d:/buglivreoficial/routes/api.php)).
 
 - **Formato**: `application/json; charset=utf-8`
-- **Corpo de entrada**: JSON (`Content-Type: application/json`)
-- **Autenticação**: token opaco Bearer no cabeçalho `Authorization: Bearer <token>` (stateless)
+- **Corpo de entrada**: JSON (`Content-Type: application/json`) ou `multipart/form-data` (upload de capa)
+- **Autenticação**: **token opaco Bearer** (`Authorization: Bearer <token>`) **ou** a
+  **sessão web** compartilhada via cookie (usada pelo próprio front-end com
+  `credentials: same-origin`)
 - **Base URL (dev)**: `http://localhost:8000/api`
 
 Leitura do catálogo é **pública**. Escrita exige autenticação e perfil
@@ -58,6 +60,7 @@ enxuto:
 | `404`  | Recurso não encontrado                                             |
 | `409`  | Conflito (exclusão bloqueada por vínculos)                         |
 | `422`  | Erro de validação (campo `errors`)                                 |
+| `429`  | Muitas requisições (limite de taxa excedido)                       |
 | `500`  | Erro interno do servidor                                           |
 
 ### Perfis (roles) e hierarquia
@@ -66,9 +69,37 @@ enxuto:
 Um perfil de nível maior satisfaz exigências menores — por exemplo, `admin`
 atende a exigência `moderador`.
 
+### Limite de taxa (rate limit)
+
+As rotas da API são limitadas por **identificador** (usuário autenticado ou IP) **e
+rota**. Os limites padrão são:
+
+| Escopo                                | Limite     |
+| ------------------------------------- | ---------- |
+| Todas as rotas `/api/*`               | 120 req/min |
+| `POST /api/auth/login`, `register`, `refresh`, `forgot-password`, `reset-password` | 10 req/min |
+
+Cabeçalhos retornados nas respostas:
+
+| Cabeçalho                | Descrição                                        |
+| ------------------------ | ------------------------------------------------ |
+| `X-RateLimit-Limit`      | Limite da janela atual                           |
+| `X-RateLimit-Remaining`  | Requisições restantes na janela                   |
+| `Retry-After`            | Segundos até liberar (apenas na resposta `429`)  |
+
+Ao exceder o limite, a resposta é **429**:
+
+```json
+{ "status": 429, "message": "Muitas requisições. Tente novamente em 55s." }
+```
+
 ---
 
 ## Autenticação
+
+> `login`, `register`, `logout` e `me` são **session-aware**: além de emitirem/consumirem
+> o token Bearer, também operam sobre a **sessão web** (cookie). O front-end do site usa
+> a sessão (fetch com `credentials: 'same-origin'`) e ignora o token retornado.
 
 ### `POST /api/auth/register`
 
@@ -141,6 +172,59 @@ Revoga o token atual e emite um novo. Requer `Authorization: Bearer <token>`.
 ```
 
 Token ausente/inválido retorna **401** `{ "success": false, "message": "Não autenticado." }`.
+
+### `POST /api/auth/forgot-password`
+
+Inicia a redefinição de senha. Se o e-mail estiver cadastrado, gera um token e envia
+por e-mail um link `APP_URL/reset-password/{token}` (válido por `PASSWORD_RESET_TTL`
+segundos, padrão `3600`). A resposta é **sempre a mesma**, para não revelar se o
+e-mail existe. Sem `MAIL_HOST` configurado, o e-mail não é enviado e o conteúdo é
+registrado no log.
+
+**Corpo**
+
+| Campo   | Tipo   | Obrigatório | Regras        |
+| ------- | ------ | ----------- | ------------- |
+| `email` | string | sim         | e-mail válido |
+
+**Resposta `200`**
+
+```json
+{
+  "success": true,
+  "message": "Se este e-mail estiver cadastrado, enviaremos um link para redefinir a senha.",
+  "data": null
+}
+```
+
+E-mail inválido retorna **422** com `errors.email`.
+
+### `POST /api/auth/reset-password`
+
+Redefine a senha a partir do token recebido por e-mail. O token é de **uso único**:
+após o sucesso ele é consumido, os demais pedidos pendentes do usuário são
+descartados e **todos os tokens de API** do usuário são revogados (exige novo login).
+
+**Corpo**
+
+| Campo                   | Tipo   | Obrigatório | Regras                      |
+| ----------------------- | ------ | ----------- | --------------------------- |
+| `token`                 | string | sim         | token do link (64 hex)      |
+| `password`              | string | sim         | mín. 8 caracteres           |
+| `password_confirmation` | string | não         | se informado, deve conferir |
+
+**Resposta `200`**
+
+```json
+{
+  "success": true,
+  "message": "Senha redefinida com sucesso. Faça login com a nova senha.",
+  "data": null
+}
+```
+
+Senha inválida retorna **422** com `errors.password`; token inválido, expirado ou já
+utilizado retorna **422** com `errors.token`.
 
 ### `GET /api/auth/me`
 
@@ -295,9 +379,11 @@ Objeto de mangá:
 | Método | Rota                     | Auth                      | Descrição                       |
 | ------ | ------------------------ | ------------------------- | ------------------------------- |
 | GET    | `/api/mangas`            | pública                   | Lista com filtros               |
-| GET    | `/api/mangas/{id}`       | pública                   | Detalhe                         |
+| GET    | `/api/mangas/{id}`       | pública                   | Detalhe por ID                  |
+| GET    | `/api/mangas/slug/{slug}`| pública                   | Detalhe por slug (catálogo)     |
 | POST   | `/api/mangas`            | `auth` + `role:moderador` | Cria                            |
-| PUT/PATCH | `/api/mangas/{id}`    | `auth` + `role:moderador` | Atualiza                        |
+| POST   | `/api/mangas/{id}`       | `auth` + `role:moderador` | Atualiza (**multipart**, upload)|
+| PUT/PATCH | `/api/mangas/{id}`    | `auth` + `role:moderador` | Atualiza (JSON)                 |
 | POST   | `/api/mangas/{id}/status` | `auth` + `role:moderador` | Alterna ativo/inativo        |
 | DELETE | `/api/mangas/{id}`       | `auth` + `role:moderador` | Exclui                          |
 
@@ -344,8 +430,20 @@ POST /api/mangas
 
 ---
 
+## Usuários
+
+| Método | Rota          | Auth                      | Descrição                          |
+| ------ | ------------- | ------------------------- | ---------------------------------- |
+| GET    | `/api/users`  | `auth` + `role:moderador` | Lista os 50 usuários mais recentes |
+
+Usado pelo painel administrativo para a tabela de usuários. Cada item segue o
+formato de usuário (`id`, `name`, `username`, `email`, `role`, `role_label`, datas).
+
+---
+
 ## Observações
 
 - Ao excluir categoria, tipo ou autor com mangás vinculados, a API retorna **409**.
-- A API é stateless: nenhuma sessão é criada; a identidade vem apenas do token Bearer.
+- A identidade pode vir do **token Bearer** (clientes externos, stateless) **ou** da
+  **sessão web** por cookie — esta última é a forma usada pelo front-end do próprio site.
 - Erros de validação nunca retornam os dados enviados; apenas o mapa `errors`.

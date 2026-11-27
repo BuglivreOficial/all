@@ -44,106 +44,14 @@ class __TwigTemplate_3ec09a95e479e572d465735b13453751 extends Template
     {
         $macros = $this->macros;
         // line 1
-        yield "<p style=\"margin: 28px 0 0;\"><a class=\"see-all\" href=\"";
+        yield "<div id=\"manga-detail\">
+    <p style=\"margin: 28px 0 0;\"><a class=\"see-all\" href=\"";
+        // line 2
         yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->url("/mangas"), "html", null, true);
         yield "\">← Voltar ao catálogo</a></p>
-
-<div class=\"detail\">
-    <div class=\"detail-cover\">
-        <div class=\"cover\">
-            ";
-        // line 6
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "cover", [], "any", false, false, false, 6)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 7
-            yield "                <img src=\"";
-            yield (string) $this->escaper->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "cover", [], "any", false, false, false, 7), "html", null, true);
-            yield "\" alt=\"Capa de ";
-            yield (string) $this->escaper->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "title", [], "any", false, false, false, 7), "html", null, true);
-            yield "\">
-            ";
-        } else {
-            // line 9
-            yield "                <div class=\"cover-ph\">";
-            yield (string) $this->escaper->escape(Twig\Extension\CoreExtension::slice($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "title", [], "any", false, false, false, 9), 0, 1), "html", null, true);
-            yield "</div>
-            ";
-        }
-        // line 11
-        yield "        </div>
-    </div>
-
-    <div>
-        <h1>";
-        // line 15
-        yield (string) $this->escaper->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "title", [], "any", false, false, false, 15), "html", null, true);
-        yield "</h1>
-        <p class=\"byline\">
-            ";
-        // line 17
-        yield (string) $this->escaper->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "type_name", [], "any", false, false, false, 17), "html", null, true);
-        yield "
-            ";
-        // line 18
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "author_name", [], "any", false, false, false, 18)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            yield " · ";
-            yield (string) $this->escaper->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "author_name", [], "any", false, false, false, 18), "html", null, true);
-        }
-        // line 19
-        yield "        </p>
-
-        <div class=\"detail-tags\">
-            <span class=\"badge badge-";
-        // line 22
-        yield (string) $this->escaper->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "status", [], "any", false, false, false, 22), "html", null, true);
-        yield "\">";
-        yield (string) $this->escaper->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["manga_statuses"] ?? null), CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "status", [], "any", false, false, false, 22), [], "array", true, true, false, 22)) ? (Twig\Extension\CoreExtension::default((($_v0 = ($context["manga_statuses"] ?? null)) && is_array($_v0) || $_v0 instanceof ArrayAccess ? ($_v0[(($_v1 = CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "status", [], "any", false, false, false, 22)) instanceof \Stringable && (is_array($_v0) || $_v0 instanceof \ArrayObject || $_v0 instanceof \ArrayIterator) ? (string) $_v1 : $_v1)] ?? null) : null), CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "status", [], "any", false, false, false, 22))) : (CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "status", [], "any", false, false, false, 22))), "html", null, true);
-        yield "</span>
-            ";
-        // line 23
-        $context['_parent'] = $context;
-        $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "categories", [], "any", false, false, false, 23));
-        foreach ($context['_seq'] as $context["_key"] => $context["category"]) {
-            // line 24
-            yield "                <a class=\"chip\" href=\"";
-            yield (string) $this->escaper->escape($this->extensions['Core\View\TwigExtension']->url("/mangas"), "html", null, true);
-            yield "?category=";
-            yield (string) $this->escaper->escape(CoreExtension::getAttribute($this->env, $this->source, $context["category"], "id", [], "any", false, false, false, 24), "html", null, true);
-            yield "\">";
-            yield (string) $this->escaper->escape(CoreExtension::getAttribute($this->env, $this->source, $context["category"], "name", [], "any", false, false, false, 24), "html", null, true);
-            yield "</a>
-            ";
-        }
-        $_parent = $context['_parent'];
-        unset($context['_seq'], $context['_key'], $context['category'], $context['_parent']);
-        $context = array_intersect_key($context, $_parent);
-        $context += $_parent;
-        // line 26
-        yield "        </div>
-
-        <dl>
-            <dt>Tipo</dt><dd>";
-        // line 29
-        yield (string) (((($tmp = CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "type_name", [], "any", false, false, false, 29)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->escaper->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "type_name", [], "any", false, false, false, 29), "html", null, true)) : ("—"));
-        yield "</dd>
-            <dt>Autor</dt><dd>";
-        // line 30
-        yield (string) (((($tmp = CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "author_name", [], "any", false, false, false, 30)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->escaper->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "author_name", [], "any", false, false, false, 30), "html", null, true)) : ("—"));
-        yield "</dd>
-            <dt>Status</dt><dd>";
-        // line 31
-        yield (string) $this->escaper->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["manga_statuses"] ?? null), CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "status", [], "any", false, false, false, 31), [], "array", true, true, false, 31)) ? (Twig\Extension\CoreExtension::default((($_v2 = ($context["manga_statuses"] ?? null)) && is_array($_v2) || $_v2 instanceof ArrayAccess ? ($_v2[(($_v3 = CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "status", [], "any", false, false, false, 31)) instanceof \Stringable && (is_array($_v2) || $_v2 instanceof \ArrayObject || $_v2 instanceof \ArrayIterator) ? (string) $_v3 : $_v3)] ?? null) : null), CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "status", [], "any", false, false, false, 31))) : (CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "status", [], "any", false, false, false, 31))), "html", null, true);
-        yield "</dd>
-            <dt>Atualizado em</dt><dd>";
-        // line 32
-        yield (string) (((($tmp = CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "updated_at", [], "any", false, false, false, 32)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->escaper->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "updated_at", [], "any", false, false, false, 32), "html", null, true)) : ((((($tmp = CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "created_at", [], "any", false, false, false, 32)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->escaper->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "created_at", [], "any", false, false, false, 32), "html", null, true)) : ("—"))));
-        yield "</dd>
-        </dl>
-
-        <h2 style=\"font-size: 18px;\">Sinopse</h2>
-        <p class=\"synopsis\">";
-        // line 36
-        yield (string) (((($tmp = CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "description", [], "any", false, false, false, 36)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->escaper->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["manga"] ?? null), "description", [], "any", false, false, false, 36), "html", null, true)) : ("Sinopse ainda não disponível."));
-        yield "</p>
+    <div class=\"empty\">
+        <div class=\"big\">📖</div>
+        <p>Carregando mangá…</p>
     </div>
 </div>
 ";
@@ -179,47 +87,16 @@ class __TwigTemplate_3ec09a95e479e572d465735b13453751 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  145 => 36,  138 => 32,  134 => 31,  130 => 30,  126 => 29,  121 => 26,  107 => 24,  103 => 23,  97 => 22,  92 => 19,  87 => 18,  83 => 17,  78 => 15,  72 => 11,  66 => 9,  58 => 7,  56 => 6,  47 => 1,);
+        return array (  50 => 2,  47 => 1,);
     }
 
     public function getSourceContext(): Source
     {
-        return new Source("<p style=\"margin: 28px 0 0;\"><a class=\"see-all\" href=\"{{ url(\x27/mangas\x27) }}\">← Voltar ao catálogo</a></p>
-
-<div class=\"detail\">
-    <div class=\"detail-cover\">
-        <div class=\"cover\">
-            {% if manga.cover %}
-                <img src=\"{{ manga.cover }}\" alt=\"Capa de {{ manga.title }}\">
-            {% else %}
-                <div class=\"cover-ph\">{{ manga.title|slice(0, 1) }}</div>
-            {% endif %}
-        </div>
-    </div>
-
-    <div>
-        <h1>{{ manga.title }}</h1>
-        <p class=\"byline\">
-            {{ manga.type_name }}
-            {% if manga.author_name %} · {{ manga.author_name }}{% endif %}
-        </p>
-
-        <div class=\"detail-tags\">
-            <span class=\"badge badge-{{ manga.status }}\">{{ manga_statuses[manga.status]|default(manga.status) }}</span>
-            {% for category in manga.categories %}
-                <a class=\"chip\" href=\"{{ url(\x27/mangas\x27) }}?category={{ category.id }}\">{{ category.name }}</a>
-            {% endfor %}
-        </div>
-
-        <dl>
-            <dt>Tipo</dt><dd>{{ manga.type_name ?: \x27—\x27 }}</dd>
-            <dt>Autor</dt><dd>{{ manga.author_name ?: \x27—\x27 }}</dd>
-            <dt>Status</dt><dd>{{ manga_statuses[manga.status]|default(manga.status) }}</dd>
-            <dt>Atualizado em</dt><dd>{{ manga.updated_at ?: (manga.created_at ?: \x27—\x27) }}</dd>
-        </dl>
-
-        <h2 style=\"font-size: 18px;\">Sinopse</h2>
-        <p class=\"synopsis\">{{ manga.description ?: \x27Sinopse ainda não disponível.\x27 }}</p>
+        return new Source("<div id=\"manga-detail\">
+    <p style=\"margin: 28px 0 0;\"><a class=\"see-all\" href=\"{{ url(\x27/mangas\x27) }}\">← Voltar ao catálogo</a></p>
+    <div class=\"empty\">
+        <div class=\"big\">📖</div>
+        <p>Carregando mangá…</p>
     </div>
 </div>
 ", "mangas/show.twig", "D:\\buglivreoficial\\app\\Views\\mangas\\show.twig");

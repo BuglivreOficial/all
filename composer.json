@@ -3,7 +3,9 @@
     "type": "project",
     "require": {
         "symfony/var-dumper": "^8.1",
-        "twig/twig": "^3.30"
+        "twig/twig": "^3.30",
+        "predis/predis": "^3.8",
+        "phpmailer/phpmailer": "^7.2"
     },
     "autoload": {
         "psr-4": {

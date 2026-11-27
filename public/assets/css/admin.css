@@ -125,6 +125,26 @@ textarea { resize: vertical; min-height: 90px; }
 select[multiple] { min-height: 150px; }
 small.muted { display: block; margin-top: 6px; }
 
+/* ---------- Seleção múltipla em chips (categorias do mangá) ---------- */
+.chips-field { margin-bottom: 16px; }
+.field-label { display: block; font-size: 13px; font-weight: 600; color: var(--muted); }
+.chips-select { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.chip-toggle {
+    padding: 7px 15px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--elevated);
+    color: var(--muted);
+    font-size: 13px; font-weight: 600;
+    transition: .15s;
+}
+.chip-toggle:hover { color: var(--text); border-color: var(--brand); }
+.chip-toggle.is-on {
+    background: var(--grad); color: #fff; border-color: transparent;
+    box-shadow: 0 6px 16px rgba(255, 61, 104, .28);
+}
+.chips-field .field-error { margin: 8px 0 0; }
+
 /* ---------- Buttons ---------- */
 button, .btn {
     font: inherit; cursor: pointer;

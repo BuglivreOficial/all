@@ -1,0 +1,23 @@
+<div class="auth-wrap">
+    <div class="card">
+        <h1>Redefinir senha</h1>
+
+        <div class="alert alert-error" id="reset-alert" hidden></div>
+
+        <form id="reset-form" novalidate>
+            <label>
+                Nova senha
+                <input type="password" name="password" required autofocus autocomplete="new-password">
+            </label>
+
+            <label>
+                Confirmar nova senha
+                <input type="password" name="password_confirmation" required autocomplete="new-password">
+            </label>
+
+            <button type="submit" class="btn btn-primary btn-block" data-loading-text="Salvando…">Redefinir senha</button>
+        </form>
+
+        <p class="auth-switch"><a href="{{ url('/login') }}">Voltar para o login</a></p>
+    </div>
+</div>
